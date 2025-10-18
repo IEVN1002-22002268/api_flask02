@@ -1,0 +1,13 @@
+<!-- el guion bajo que inicia con un nombre de archivo, se refiere a archivo privado -->
+<!-- renderizar vistas y que se generen las vistas --> 
+ <!-- palabra reservada macro, es como generar una plantilla -->
+  <!-- renderizar los campos a trabajar en un HTML -->
+{% macro datos(name, placeholder, type='text') %}
+<!-- si tengo que escribir muchas veces esto, como 5 inputs, 
+ya funciona con solo escribirla una vez -->
+ <div class="mb-3">
+    <label for="{name}" class="form-label">{{name}}</label>
+    <input type="{{type}}" class="form-control" id="{{name}}" 
+    name="{{name}}" placeholder="{{placeholder}}">
+</div>
+{% endmacro %}
