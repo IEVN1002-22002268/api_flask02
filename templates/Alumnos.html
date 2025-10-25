@@ -2,12 +2,15 @@
 {%import "_macros.html" as macro%}
     {%block container%}
 
-        <form action="" method="post">
+        <form action="" method="post" novalidate>
             {{ macro.camposNuevos(form.matricula) }}
             {{ macro.camposNuevos(form.nombre) }}
             {{ macro.camposNuevos(form.apellido) }}
             {{ macro.camposNuevos(form.correo) }}
             <input type="submit" value="Guardar" class="btn btn-primary">
         </form>
-        <h1></h1>
+        <h4>Matricula: {{mat}}</h4>
+        <h4>Nombre: {{nom}}</h4>
+        <h4>Apellido: {{ape}}</h4>
+        <h4>Correo: {{email}}</h4>
     {%endblock%}

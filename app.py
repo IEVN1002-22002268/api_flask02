@@ -59,7 +59,7 @@ def alumnos():
     email=""
     """ crear instancia de la clase """
     alumno_clase=forms.UserForm(request.form)
-    if request.method == 'POST':
+    if request.method == 'POST' and alumno_clase.validate():
         mat=alumno_clase.matricula.data
         nom=alumno_clase.nombre.data
         ape=alumno_clase.apellido.data
