@@ -1,5 +1,7 @@
 
-from flask import Flask, render_template
+from flask import Flask, render_template, request
+import math
+import forms
 
 app = Flask(__name__)
 """ desde donde arrancará mi proyecto es lo que indica el ('/') """
@@ -9,13 +11,61 @@ def index():
     listado = ['Python', 'Flask', 'Jinja2', 'HTML', 'CSS']
     return render_template('index.html', titulo = titulo, listado = listado)
 
-@app.route('/calculos')
+""" mandar llamar la pagina por primera vez: tengo un get, se muestra sin valores """
+""" mandar llamar a la pagina por segunda vez: un post que ya dibuja los valores """
+@app.route('/calculos', methods=['GET','POST'])
 def calculos():
+    if request.method == 'POST':
+        numero1 = request.form['numero1']
+        numero2 = request.form['numero2']
+        opcion = request.form['opcion']
+        if opcion == 'suma':
+            res = int(numero1) + int(numero2)
+            signoop = '+'
+        if opcion == 'resta':
+            res = int(numero1) - int(numero2)
+            signoop = '-'
+        if opcion == 'multiplicacion':
+            res = int(numero1) * int(numero2)
+            signoop = '*'
+        if opcion == 'division':
+            res = int(numero1) / int(numero2)
+            signoop = '/'
+        return render_template('calculos.html', res=res, numero1=numero1, numero2=numero2, signoop=signoop)
     return render_template('calculos.html')
 
-@app.route('/distancia')
+@app.route('/distancia', methods=['GET','POST'])
 def distancia():
+    if request.method == 'POST':
+        numerox1 = request.form['numerox1']
+        numerox2 = request.form['numerox2']
+        numeroy1 = request.form['numeroy1']
+        numeroy2 = request.form['numeroy2']
+        operacionX = int(numerox2) - int((numerox1))
+        operacionY = int(numeroy2) - int((numeroy1))
+        xCuadrada = math.pow(operacionX, 2)
+        yCuadrada = math.pow(operacionY, 2)
+        sumaDeXyY = xCuadrada + yCuadrada
+        res = int(math.sqrt(sumaDeXyY))
+        return render_template('distancia.html', numerox1=numerox1, numerox2=numerox2,
+                            numeroy1=numeroy1, numeroy2=numeroy2, res=res)
     return render_template('distancia.html')
+
+@app.route('/Alumnos', methods=['GET','POST'])
+def alumnos():
+    mat = 0
+    nom=""
+    ape=""
+    email=""
+    """ crear instancia de la clase """
+    alumno_clase=forms.UserForm(request.form)
+    if request.method == 'POST':
+        mat=alumno_clase.matricula.data
+        nom=alumno_clase.nombre.data
+        ape=alumno_clase.apellido.data
+        email=alumno_clase.correo.data
+        """ render template no se repite porque las VARIABLES están declaradas ANTES del method POST """
+    return render_template('Alumnos.html', form=alumno_clase, mat=mat, nom=nom, ape=ape, email=email)
 
 """ variable tipo string llamada user """
 @app.route('/user/<string:user>')
