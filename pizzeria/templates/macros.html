@@ -1,0 +1,10 @@
+{% macro datos(name, placeholder, type='text') %}
+
+<div class="form-check">
+    <input class="form-check-input" type="checkbox" value="10" name="{{name}}" id="{{name}}">
+    <label class="form-check-label" for="{{name}}">
+        {{name}} 10$
+    </label>
+</div>
+
+{% endmacro %}

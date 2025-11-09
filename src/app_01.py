@@ -2,6 +2,7 @@
 from flask import Flask, render_template, request
 import math
 import forms
+from flask import make_response, jsonify, json
 
 app = Flask(__name__)
 """ desde donde arrancará mi proyecto es lo que indica el ('/') """
@@ -57,15 +58,42 @@ def alumnos():
     nom=""
     ape=""
     email=""
-    """ crear instancia de la clase """
+    tem=[]
+    estudiantes=[]
+    datos=()
     alumno_clase=forms.UserForm(request.form)
+    
     if request.method == 'POST' and alumno_clase.validate():
+        if request.form.get("btnElimina")=='eliminar':
+            response = make_response(render_template('Alumnos.html',))
+            response.delete_cookie('usuario')
         mat=alumno_clase.matricula.data
         nom=alumno_clase.nombre.data
         ape=alumno_clase.apellido.data
         email=alumno_clase.correo.data
-        """ render template no se repite porque las VARIABLES están declaradas ANTES del method POST """
-    return render_template('Alumnos.html', form=alumno_clase, mat=mat, nom=nom, ape=ape, email=email)
+
+        datos={'matricula':mat,'nombre':nom.rstrip(),
+               'apellido':ape.rstrip(),'email':email.rstrip()}  
+        
+        data_str = request.cookies.get("usuario")
+        if not data_str:
+             return "No hay cookie guardada", 404
+        estudiantes = json.loads(data_str)
+        estudiantes.append(datos)  
+    response=make_response(render_template('Alumnos.html',
+        form=alumno_clase, mat=mat, nom=nom, apell=ape, email=email))
+
+    if request.method!='GET':
+        response.set_cookie('usuario', json.dumps(estudiantes))
+    return response
+
+@app.route("/get_cookie")
+def get_cookie():
+    data_str = request.cookies.get("usuario")
+    if not data_str:
+        return "No hay cookie guardada", 404
+    estudiantes = json.loads(data_str)
+    return jsonify(estudiantes)
 
 """ variable tipo string llamada user """
 @app.route('/user/<string:user>')
