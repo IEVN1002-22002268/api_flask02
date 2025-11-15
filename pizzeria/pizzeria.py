@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-import forms
+import pizzeria.bases_flask.forms as forms
 from flask import make_response, jsonify, json
 
 app = Flask(__name__)
